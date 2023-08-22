@@ -1,3 +1,3 @@
 # schoolapp
 
-A new Flutter project.
+A Flutter Project for wrapping a php project.
