@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "760038704158",
+    "project_id": "sycasane-sever",
+    "storage_bucket": "sycasane-sever.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760038704158:android:eb9f692e44635b41f41a0f",
+        "android_client_info": {
+          "package_name": "com.infosource.schoolapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760038704158-874h2ei86snscjs5moo9627secmicub5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.infosource.schoolapp",
+            "certificate_hash": "2c571f0c9b9e954b45f3d078acbf7963b3f1bbf1"
+          }
+        },
+        {
+          "client_id": "760038704158-uhee72nov36ercjhbc5d7dnp2spvi771.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2T-BjtirT3W95onHzUCDurT1DQPevkug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760038704158-uhee72nov36ercjhbc5d7dnp2spvi771.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
