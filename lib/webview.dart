@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'help.dart';
 import 'cache.dart';
 
 class WebViewXPage extends StatefulWidget {
@@ -31,8 +30,9 @@ class WebViewXPageState extends State<WebViewXPage> {
 
   @override
   void initState() {
-    Timer(const Duration(milliseconds: 500), () {
-      _setUrl('https://www.sycasane.com/server/index.php');
+    Timer(const Duration(milliseconds: 500), () async {
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      _setUrl('https://www.sycasane.com/server/index.php?fb=$fcmToken');
     });
     super.initState();
     /*
@@ -73,12 +73,13 @@ class WebViewXPageState extends State<WebViewXPage> {
       width: screenSize.width,
       //width: min(screenSize.width * 0.8, 1024),
       onWebViewCreated: (controller) => webviewController = controller,
+      /*
       onPageStarted: (src) {
         //debugPrint("URL :$src");
       },
       onPageFinished: (src) {
         fillcache(src);
-        debugPrint('A new page has loaded: $src\n');
+        //debugPrint('A new page has loaded: $src\n');
       },
       jsContent: const {
         EmbeddedJsContent(
@@ -106,13 +107,12 @@ class WebViewXPageState extends State<WebViewXPage> {
       navigationDelegate: (navigation) {
         debugPrint(navigation.content.sourceType.toString());
         return NavigationDecision.navigate;
-      },
+      },*/
     );
   }
 
   Future<void> fillcache(src) async {
     String? privilege;
-    String? tokenUrl;
     //debugPrint("GetString ${prefs.getString('privilege')}");
     //if (prefs.privilege == null) {
     src.contains('eschooladmindashboard')
@@ -125,17 +125,7 @@ class WebViewXPageState extends State<WebViewXPage> {
                     ? privilege = "accounts"
                     : privilege;
 
-    //if (privilege != null) {
-    //_setUrl("$src/?token=${prefs.fcmToken}");
     prefs.privilege = privilege;
-    tokenUrl ??= "$src/?token=${prefs.fcmToken}";
-    if (prefs.setToken == true) {
-      try {
-        _setUrl(tokenUrl);
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    }
     //do notification
     debugPrint("privilege :$privilege");
     await FirebaseMessaging.instance.subscribeToTopic(privilege!);

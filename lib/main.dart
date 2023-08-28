@@ -11,7 +11,7 @@ import 'package:no_internet_check/no_internet_check.dart';
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //import 'package:elegant_notification/elegant_notification.dart';
-import 'cache.dart';
+//import 'cache.dart';
 //import 'package:flutter/foundation.dart';
 import 'webview.dart';
 
@@ -93,7 +93,6 @@ Future<void> main() async {
   if (!kIsWeb) {
     await Firebase.initializeApp();
     await setupFlutterNotifications();
-    await prefs.init();
     //prefs.clear();
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -106,22 +105,9 @@ Future<void> main() async {
       provisional: false,
       sound: true,
     );
-    debugPrint("fcmToken: ${prefs.fcmToken}");
 
     if (settings.authorizationStatus.toString() == "denied") {
       debugPrint("auth denied");
-    }
-
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-
-    if (prefs.fcmToken != "$fcmToken") {
-      prefs.fcmToken = "$fcmToken";
-      prefs.setToken = true;
-
-      debugPrint("fcmToken: ${prefs.fcmToken}");
-      //passtoken to url
-    } else {
-      prefs.setToken = false;
     }
   }
   runApp(const MyApp());
