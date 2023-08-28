@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'cache.dart';
-
 class WebViewXPage extends StatefulWidget {
   const WebViewXPage({
     Key? key,
@@ -20,7 +18,6 @@ class WebViewXPageState extends State<WebViewXPage> {
   final scrollController = ScrollController();
 
   final initialContent = '<div></div>';
-  //'<center><br/><br/>Click Home Button If Page is Stalling<br/><br/><br/><br/><br/><br/>Syscane Server Loading...</center>';
   final executeJsErrorMessage =
       'Failed to execute this task because the current content is (probably) URL that allows iFrame embedding, on Web.\n\n'
       'A short reason for this is that, when a normal URL is embedded in the iFrame, you do not actually own that content so you cant call your custom functions\n'
@@ -35,18 +32,6 @@ class WebViewXPageState extends State<WebViewXPage> {
       _setUrl('https://www.sycasane.com/server/index.php?fb=$fcmToken');
     });
     super.initState();
-    /*
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('Got a message whilst in the foreground!');
-      debugPrint('Message data: ${message.notification}');
-      ElegantNotification.success(
-              title: Text("${message.notification?.title}"),
-              height: screenSize.height / 4,
-              description: Text("${message.notification?.body}"))
-          .show(context);
-
-      notify.showFlutterNotification(message);
-    });*/
   }
 
   @override
@@ -71,50 +56,12 @@ class WebViewXPageState extends State<WebViewXPage> {
       initialSourceType: SourceType.html,
       height: screenSize.height,
       width: screenSize.width,
-      //width: min(screenSize.width * 0.8, 1024),
       onWebViewCreated: (controller) => webviewController = controller,
-      /*
-      onPageStarted: (src) {
-        //debugPrint("URL :$src");
-      },
-      onPageFinished: (src) {
-        fillcache(src);
-        //debugPrint('A new page has loaded: $src\n');
-      },
-      jsContent: const {
-        EmbeddedJsContent(
-          js: "function testPlatformIndependentMethod() { console.log('Hi from JS') }",
-        ),
-        EmbeddedJsContent(
-          webJs:
-              "function testPlatformSpecificMethod(msg) { TestDartCallback('Web callback says: ' + msg) }",
-          mobileJs:
-              "function testPlatformSpecificMethod(msg) { TestDartCallback.postMessage('Mobile callback says: ' + msg) }",
-        ),
-      },
-      dartCallBacks: {
-        DartCallback(
-          name: 'TestDartCallback',
-          callBack: (msg) => showSnackBar(msg.toString(), context),
-        )
-      },
-      webSpecificParams: const WebSpecificParams(
-        printDebugInfo: true,
-      ),
-      mobileSpecificParams: const MobileSpecificParams(
-        androidEnableHybridComposition: true,
-      ),
-      navigationDelegate: (navigation) {
-        debugPrint(navigation.content.sourceType.toString());
-        return NavigationDecision.navigate;
-      },*/
     );
   }
 
   Future<void> fillcache(src) async {
     String? privilege;
-    //debugPrint("GetString ${prefs.getString('privilege')}");
-    //if (prefs.privilege == null) {
     src.contains('eschooladmindashboard')
         ? privilege = "admin"
         : src.contains('eschoolstaffoptions')
@@ -125,13 +72,8 @@ class WebViewXPageState extends State<WebViewXPage> {
                     ? privilege = "accounts"
                     : privilege;
 
-    prefs.privilege = privilege;
-    //do notification
-    debugPrint("privilege :$privilege");
     await FirebaseMessaging.instance.subscribeToTopic(privilege!);
-    //FirebaseMessaging.getInstance().subscribeToTopic(privilege);
-    //}
-    //}
+
     debugPrint("executed");
   }
 
@@ -140,47 +82,4 @@ class WebViewXPageState extends State<WebViewXPage> {
       content,
     );
   }
-/*
-  void _setHtml() {
-    webviewController.loadContent(
-      initialContent,
-      sourceType: SourceType.url,
-    );
-  }
-
-  Future<void> _goForward() async {
-    if (await webviewController.canGoForward()) {
-      await webviewController.goForward();
-    } else {
-      showSnackBar('Cannot go forward', context);
-    }
-  }
-
-  Future<void> _goBack() async {
-    if (await webviewController.canGoBack()) {
-      await webviewController.goBack();
-    } else {
-      showSnackBar('Cannot go back', context);
-    }
-  }
-
-  void _reload() {
-    webviewController.reload();
-  }
-
-  Future<void> _getWebviewContent() async {
-    try {
-      final content = await webviewController.getContent();
-      showAlertDialog(content.source, context);
-    } catch (e) {
-      showAlertDialog('Failed to execute this task.', context);
-    }
-  }
-
-  void _toggleIgnore() {
-    final ignoring = webviewController.ignoresAllGestures;
-    webviewController.setIgnoreAllGestures(!ignoring);
-    showSnackBar('Ignore events = ${!ignoring}', context);
-  }
-  */
 }
