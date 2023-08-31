@@ -11,7 +11,7 @@ import 'package:no_internet_check/no_internet_check.dart';
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //import 'package:elegant_notification/elegant_notification.dart';
-//import 'cache.dart';
+import 'cache.dart';
 //import 'package:flutter/foundation.dart';
 import 'webview.dart';
 
@@ -75,7 +75,7 @@ void showFlutterNotification(RemoteMessage message) {
           channelDescription: channel.description,
           // TODO add a proper drawable resource to android, for now using
           //      one that already exists in example app.
-          icon: 'launch_background',
+          icon: "@mipmap/ic_launcher", //launch_background
         ),
       ),
     );
@@ -93,7 +93,7 @@ Future<void> main() async {
   if (!kIsWeb) {
     await Firebase.initializeApp();
     await setupFlutterNotifications();
-    //prefs.clear();
+    prefs.init();
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     NotificationSettings settings = await messaging.requestPermission(
@@ -137,9 +137,9 @@ class MyApp extends StatelessWidget {
       navigatorKey: NavigationService.navigationKey,
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashPage(),
+        '/': (context) => const MyHomePage(),
         // '/': (context) => SplashFuturePage(),
-        '/home': (context) => const MyHomePage(),
+        //'/home': (context) => const MyHomePage(),
       },
       //home: const MyHomePage(),
     );
@@ -192,9 +192,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return const Scaffold(
+    return Scaffold(
         body: Center(
-      child: Text("Getting Server Ready"),
+      child: Image.asset(
+        "assets/images/app_logo_full.jpg",
+        width: 100,
+        height: 100,
+      ),
     )
         // This trailing comma makes auto-formatting nicer for build methods.
         );
@@ -242,7 +246,7 @@ class SplashPageState extends State<SplashPage> {
         ),
       ),
       showLoader: false,
-      navigator: const MyHomePage(),
+      navigator: const HomeScreen(),
       durationInSeconds: 2,
     );
   }

@@ -13,6 +13,14 @@ class SharedPrefs {
     }
   }
 
+  String? get user {
+    return _sharedPrefs?.getString('user');
+  }
+
+  set user(String? value) {
+    _sharedPrefs?.setString('user', value!);
+  }
+
   String? get privilege {
     return _sharedPrefs?.getString('privilege');
   }

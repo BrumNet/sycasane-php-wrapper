@@ -32,7 +32,9 @@ class WebViewXPageState extends State<WebViewXPage> {
   void initState() {
     Timer(const Duration(milliseconds: 500), () async {
       final fcmToken = await FirebaseMessaging.instance.getToken();
-      _setUrl('https://www.sycasane.com/server/index.php?fb=$fcmToken');
+      prefs.fcmToken = fcmToken;
+      _setUrl(
+          'http://www.sycasane.com/server/parentslogin.php?compcode=CARERUS&fb=$fcmToken');
     });
     super.initState();
     /*
@@ -73,14 +75,15 @@ class WebViewXPageState extends State<WebViewXPage> {
       width: screenSize.width,
       //width: min(screenSize.width * 0.8, 1024),
       onWebViewCreated: (controller) => webviewController = controller,
-      /*
-      onPageStarted: (src) {
-        //debugPrint("URL :$src");
-      },
       onPageFinished: (src) {
         fillcache(src);
         //debugPrint('A new page has loaded: $src\n');
       },
+      /*
+      onPageStarted: (src) {
+        //debugPrint("URL :$src");
+      },
+      
       jsContent: const {
         EmbeddedJsContent(
           js: "function testPlatformIndependentMethod() { console.log('Hi from JS') }",
@@ -114,25 +117,24 @@ class WebViewXPageState extends State<WebViewXPage> {
   Future<void> fillcache(src) async {
     String? privilege;
     //debugPrint("GetString ${prefs.getString('privilege')}");
-    //if (prefs.privilege == null) {
-    src.contains('eschooladmindashboard')
-        ? privilege = "admin"
-        : src.contains('eschoolstaffoptions')
-            ? privilege = "staff"
-            : src.contains('parent')
-                ? privilege = "parent"
-                : src.contains('eschoolaccountsdashboard')
-                    ? privilege = "accounts"
-                    : privilege;
+    if (prefs.privilege == null) {
+      src.contains('eschooladmindashboard')
+          ? privilege = "admin"
+          : src.contains('eschoolstaffoptions')
+              ? privilege = "staff"
+              : src.contains("eschoolparent")
+                  ? privilege = "parent"
+                  : src.contains('eschoolaccountsdashboard')
+                      ? privilege = "accounts"
+                      : privilege = "parent";
 
-    prefs.privilege = privilege;
-    //do notification
-    debugPrint("privilege :$privilege");
-    await FirebaseMessaging.instance.subscribeToTopic(privilege!);
-    //FirebaseMessaging.getInstance().subscribeToTopic(privilege);
-    //}
-    //}
-    debugPrint("executed");
+      prefs.privilege = privilege;
+      //do notification
+      debugPrint("privilege :$privilege");
+      await FirebaseMessaging.instance.subscribeToTopic(privilege /*!*/);
+      //FirebaseMessaging.getInstance().subscribeToTopic(privilege);
+      //}
+    }
   }
 
   void _setUrl(content) {
